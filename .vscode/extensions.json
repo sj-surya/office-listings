@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "tailwindlabs.tailwindcss-intellisense",
+    "esbenp.prettier-vscode",
+    "mohsen1.prettify",
+    "rvest.vs-code-prettier-eslint",
+    "dbaeumer.vscode-eslint",
+    "abusaidm.vscode-duelsh"
+  ]
+}

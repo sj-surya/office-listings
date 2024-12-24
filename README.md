@@ -1,5 +1,13 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+
+## To create the Next.js
+
+```bash
+yarn create next-app office-listings --typescript
+```
+
+
 ## Getting Started
 
 First, run the development server:

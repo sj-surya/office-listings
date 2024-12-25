@@ -14,4 +14,5 @@ export default {
     },
   },
   plugins: [],
+  safelist: ["rotate-0", "rotate-180", "opacity-0", "opacity-100"],
 } satisfies Config;

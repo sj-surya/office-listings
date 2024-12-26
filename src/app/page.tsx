@@ -1,10 +1,9 @@
 "use client";
 import { useState } from "react";
-import { offices as initialOffices } from "@/data/offices";
-import OfficeCard from "@/components/OfficeCard";
-import AddEditOffice from "@/components/AddEditOffice";
 import Image from "next/image";
-import { OfficeItem } from "@/types/offices";
+import { offices as initialOffices } from "@/data/offices";
+import { AddEditOffice, OfficeCard } from "@/components";
+import { OfficeItem } from "@/types";
 
 const Home = () => {
   const [offices, setOffices] = useState(initialOffices);

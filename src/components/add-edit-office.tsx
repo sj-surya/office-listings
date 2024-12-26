@@ -1,23 +1,7 @@
-import { OfficeItem } from "@/types/offices";
-import Image from "next/image";
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-
-interface FormInputs {
-  title: string;
-  address: string;
-  fullName: string;
-  jobPosition: string;
-  email: string;
-  phone: string;
-}
-
-interface AddEditOfficeProps {
-  office?: OfficeItem;
-  editingOffice?: { id: number } | null;
-  onSave: (office: OfficeItem) => void;
-  onCancel: () => void;
-}
+import Image from "next/image";
+import { AddEditOfficeProps, OfficeFormInputs, OfficeItem } from "@/types";
 
 const AddEditOffice: React.FC<AddEditOfficeProps> = ({
   office,
@@ -31,7 +15,7 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
     setValue,
     formState: { errors },
     reset,
-  } = useForm<FormInputs>({
+  } = useForm<OfficeFormInputs>({
     defaultValues: {
       title: office?.officeTitle,
       address: office?.officeAddress,
@@ -45,7 +29,7 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
   const [phone, setPhone] = useState(office?.contactInfo.phoneNumber || "");
 
   const formatPhoneNumber = (value: string): string => {
-    const cleaned = value.replace(/\D+/g, ""); // Remove all non-numeric characters
+    const cleaned = value.replace(/\D+/g, "").slice(0, 10);
     const match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
 
     if (!match) return value;
@@ -58,10 +42,10 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
     return "";
   };
 
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhoneInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formattedPhone = formatPhoneNumber(e.target.value);
-    setPhone(formattedPhone); // Update local state
-    setValue("phone", formattedPhone); // Update react-hook-form value
+    setPhone(formattedPhone);
+    setValue("phone", formattedPhone);
   };
 
   const onFormCancel = () => {
@@ -69,7 +53,7 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
     onCancel();
   };
 
-  const onSubmit: SubmitHandler<FormInputs> = (data) => {
+  const onSubmit: SubmitHandler<OfficeFormInputs> = (data) => {
     const { title, address, fullName, jobPosition, email, phone } = data;
 
     const newOfficeData: OfficeItem = {
@@ -103,7 +87,7 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
         />
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* Title Field */}
+        {/* Title Input Div */}
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Title *
@@ -120,7 +104,7 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
           )}
         </div>
 
-        {/* Address Field */}
+        {/* Address Input Div */}
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Enter the address *
@@ -141,7 +125,7 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
 
         <h2 className="text-md text-sky-600">Contact Information</h2>
 
-        {/* Full Name Field */}
+        {/* Full Name Input Div */}
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Full Name *
@@ -160,7 +144,7 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
           )}
         </div>
 
-        {/* Job Position Field */}
+        {/* Job Position Input Div */}
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Job Position *
@@ -181,7 +165,7 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
           )}
         </div>
 
-        {/* Email Field */}
+        {/* Email Input Div */}
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Email Address *
@@ -205,7 +189,7 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
           )}
         </div>
 
-        {/* Phone Field */}
+        {/* Phone Number Input Div */}
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Phone *
@@ -220,7 +204,7 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
                 message: "Phone number must match (XXX) XXX-XXXX format",
               },
             })}
-            onInput={handlePhoneChange}
+            onInput={handlePhoneInput}
             placeholder="(XXX) XXX-XXXX"
             className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring focus:ring-blue-500 focus:outline-none sm:text-sm ${
               errors.phone ? "border-red-500" : "border-gray-300"

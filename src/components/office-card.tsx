@@ -1,7 +1,7 @@
-import { OfficeCardProps } from "@/types/office-cards";
 import { useMemo } from "react";
 import Image from "next/image";
-import AddEditOffice from "./AddEditOffice";
+import AddEditOffice from "./add-edit-office";
+import { OfficeCardProps } from "@/types";
 
 const OfficeCard: React.FC<OfficeCardProps> = ({
   officeData,

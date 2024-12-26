@@ -74,8 +74,8 @@ const OfficeCard: React.FC<OfficeCardProps> = ({
                   <Image
                     src="/images/edit-pencil.svg"
                     alt="Edit"
-                    width={20}
-                    height={20}
+                    width={23}
+                    height={23}
                   />
                   Edit
                 </button>

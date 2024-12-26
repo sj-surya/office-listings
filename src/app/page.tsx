@@ -13,6 +13,7 @@ const Home = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [isMessageVisible, setIsMessageVisible] = useState(false);
   const [action, setAction] = useState("added");
+  const [scrollToItemId, setScrollToItemId] = useState<number | null>(null);
 
   const toggleOpen = (itemId: number) => {
     setOffices((prev) =>
@@ -36,7 +37,7 @@ const Home = () => {
   };
 
   const handleSave = (updatedData: OfficeItem) => {
-    const { id } = updatedData;
+    let { id } = updatedData;
 
     if (id !== -1) {
       setOffices((prev) =>
@@ -44,18 +45,23 @@ const Home = () => {
       );
       setEditingOffice(null);
       setAction("edited");
+      setScrollToItemId(id);
     } else {
-      setOffices((prev) => [
-        ...prev.map((office, idx) => {
-          return { ...office, id: idx + 1 };
-        }),
-        {
-          ...updatedData,
-          id: prev.length + 1,
-        },
-      ]);
+      setOffices((prev) => {
+        id = prev.length + 1;
+        return [
+          ...prev.map((office, idx) => {
+            return { ...office, id: idx + 1 };
+          }),
+          {
+            ...updatedData,
+            id: prev.length + 1,
+          },
+        ];
+      });
       setAction("added");
       setIsAdding(false);
+      setScrollToItemId(id);
     }
     setIsMessageVisible(true);
   };
@@ -118,6 +124,8 @@ const Home = () => {
               handleSave={handleSave}
               onDelete={deleteOffice}
               onOfficeFormCancel={officeFormCancel}
+              scrollToItemId={scrollToItemId}
+              setScrollToItemId={setScrollToItemId}
             />
           );
         })}

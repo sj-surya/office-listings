@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import Image from "next/image";
 import AddEditOffice from "./add-edit-office";
 import { OfficeCardProps } from "@/types";
@@ -6,6 +6,8 @@ import { OfficeCardProps } from "@/types";
 const OfficeCard: React.FC<OfficeCardProps> = ({
   officeData,
   editingOffice,
+  scrollToItemId,
+  setScrollToItemId,
   onToggleExpand,
   onEditHandler,
   handleSave,
@@ -16,8 +18,25 @@ const OfficeCard: React.FC<OfficeCardProps> = ({
   const { fullName, jobPosition, email, phoneNumber } = useMemo(() => {
     return officeData.contactInfo;
   }, [officeData.contactInfo]);
+  const htmlRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (scrollToItemId === id) {
+      htmlRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+
+      htmlRef.current?.focus();
+      setScrollToItemId(null);
+    }
+  }, [id, scrollToItemId, setScrollToItemId]);
   return (
-    <div className="border rounded-lg shadow-md">
+    <div
+      tabIndex={0}
+      className="border rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-opacity-50"
+      ref={htmlRef}
+    >
       {editingOffice?.id === id ? (
         <AddEditOffice
           onSave={handleSave}

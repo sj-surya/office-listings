@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { offices as initialOffices } from "@/data/offices";
-import { AddEditOffice, OfficeCard } from "@/components";
+import { AddEditOffice, MessagePopup, OfficeCard } from "@/components";
 import { OfficeItem } from "@/types";
 
 const Home = () => {
@@ -11,6 +11,7 @@ const Home = () => {
     null
   );
   const [isAdding, setIsAdding] = useState(false);
+  const [isMessageVisible, setIsMessageVisible] = useState(false);
 
   const toggleOpen = (itemId: number) => {
     setOffices((prev) =>
@@ -43,6 +44,7 @@ const Home = () => {
       ]);
       setIsAdding(false);
     }
+    setIsMessageVisible(true);
   };
 
   const officeFormCancel = () => {
@@ -58,6 +60,14 @@ const Home = () => {
 
   return (
     <div className="min-w-96 w-96 mx-auto p-4 grid">
+      {isMessageVisible && (
+        <MessagePopup
+          message="Office location saved successfully!"
+          onClose={() => {
+            setIsMessageVisible(false);
+          }}
+        />
+      )}
       <h1 className="text-6xl text-center mb-8 text-cyan-600">Offices</h1>
       <div className="w-full grid gap-4">
         <div

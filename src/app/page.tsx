@@ -12,6 +12,7 @@ const Home = () => {
   );
   const [isAdding, setIsAdding] = useState(false);
   const [isMessageVisible, setIsMessageVisible] = useState(false);
+  const [action, setAction] = useState("added");
 
   const toggleOpen = (itemId: number) => {
     setOffices((prev) =>
@@ -23,7 +24,15 @@ const Home = () => {
   };
 
   const deleteOffice = (itemId: number) => {
-    setOffices((prev) => prev.filter((office) => office.id !== itemId));
+    setOffices((prev) =>
+      prev
+        .filter((office) => office.id !== itemId)
+        .map((office, idx) => {
+          return { ...office, id: idx + 1 };
+        })
+    );
+    setAction("deleted");
+    setIsMessageVisible(true);
   };
 
   const handleSave = (updatedData: OfficeItem) => {
@@ -34,14 +43,18 @@ const Home = () => {
         prev.map((office) => (office.id === id ? updatedData : office))
       );
       setEditingOffice(null);
+      setAction("edited");
     } else {
       setOffices((prev) => [
-        ...prev,
+        ...prev.map((office, idx) => {
+          return { ...office, id: idx + 1 };
+        }),
         {
           ...updatedData,
-          id,
+          id: prev.length + 1,
         },
       ]);
+      setAction("added");
       setIsAdding(false);
     }
     setIsMessageVisible(true);
@@ -62,7 +75,7 @@ const Home = () => {
     <div className="min-w-96 w-96 mx-auto p-4 grid">
       {isMessageVisible && (
         <MessagePopup
-          message="Office location saved successfully!"
+          message={`Office location ${action} successfully!`}
           onClose={() => {
             setIsMessageVisible(false);
           }}

@@ -3,6 +3,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import Image from "next/image";
 import { AddEditOfficeProps, OfficeFormInputs, OfficeItem } from "@/types";
 
+const inputTextBoxClasses = `mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring focus:ring-blue-500 focus:outline-none sm:text-sm`;
+
 const AddEditOffice: React.FC<AddEditOfficeProps> = ({
   office,
   editingOffice,
@@ -13,7 +15,7 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
+    formState: { errors, isValid },
     reset,
   } = useForm<OfficeFormInputs>({
     defaultValues: {
@@ -24,6 +26,7 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
       email: office?.contactInfo?.email,
       phone: office?.contactInfo?.phoneNumber,
     },
+    mode: "onChange",
   });
 
   const [phone, setPhone] = useState(office?.contactInfo.phoneNumber || "");
@@ -50,6 +53,7 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
 
   const onFormCancel = () => {
     reset();
+    setPhone("");
     onCancel();
   };
 
@@ -95,7 +99,7 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
           <input
             type="text"
             {...register("title", { required: "Title is required" })}
-            className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring focus:ring-blue-500 focus:outline-none sm:text-sm ${
+            className={`${inputTextBoxClasses} ${
               errors.title ? "border-red-500" : "border-gray-300"
             }`}
           />
@@ -112,7 +116,7 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
           <input
             type="text"
             {...register("address", { required: "Address is required" })}
-            className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring focus:ring-blue-500 focus:outline-none sm:text-sm ${
+            className={`${inputTextBoxClasses} ${
               errors.address ? "border-red-500" : "border-gray-300"
             }`}
           />
@@ -133,7 +137,7 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
           <input
             type="text"
             {...register("fullName", { required: "Full name is required" })}
-            className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring focus:ring-blue-500 focus:outline-none sm:text-sm ${
+            className={`${inputTextBoxClasses} ${
               errors.fullName ? "border-red-500" : "border-gray-300"
             }`}
           />
@@ -154,7 +158,7 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
             {...register("jobPosition", {
               required: "Job Position is required",
             })}
-            className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring focus:ring-blue-500 focus:outline-none sm:text-sm ${
+            className={`${inputTextBoxClasses} ${
               errors.jobPosition ? "border-red-500" : "border-gray-300"
             }`}
           />
@@ -180,7 +184,7 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
               },
             })}
             placeholder="name@example.com"
-            className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring focus:ring-blue-500 focus:outline-none sm:text-sm ${
+            className={`${inputTextBoxClasses} ${
               errors.email ? "border-red-500" : "border-gray-300"
             }`}
           />
@@ -206,7 +210,7 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
             })}
             onInput={handlePhoneInput}
             placeholder="(XXX) XXX-XXXX"
-            className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring focus:ring-blue-500 focus:outline-none sm:text-sm ${
+            className={`${inputTextBoxClasses} ${
               errors.phone ? "border-red-500" : "border-gray-300"
             }`}
           />
@@ -220,7 +224,7 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
           <button
             type="button"
             onClick={onFormCancel}
-            className="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
+            className="w-full py-2 px-4 rounded-md text-white bg-red-500  hover:bg-red-600"
           >
             Cancel
           </button>
@@ -228,7 +232,12 @@ const AddEditOffice: React.FC<AddEditOfficeProps> = ({
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+            disabled={!isValid}
+            className={`w-full py-2 px-4 rounded-md text-white ${
+              isValid
+                ? "bg-blue-500 hover:bg-blue-600"
+                : "bg-gray-400 cursor-not-allowed"
+            }`}
           >
             Save
           </button>
